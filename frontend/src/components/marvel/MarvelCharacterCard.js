@@ -1,0 +1,171 @@
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import Layout from '../../components/layout/Layout';
+import MarvelCharacterCard from '../../components/marvel/MarvelCharacterCard';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { useMarvelData } from '../../hooks/useMarvelData';
+
+const Container = styled.div`
+  padding: 2rem;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  text-align: center;
+`;
+
+const Subtitle = styled.p`
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+  text-align: center;
+`;
+
+const SearchContainer = styled.div`
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+`;
+
+const SearchInput = styled.input`
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--box-shadow);
+ 
+  &:focus {
+    outline: none;
+    border-color: #e23636;
+  }
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+`;
+
+const LoadMoreContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+`;
+
+const LoadMoreButton = styled(motion.button)`
+  background-color: #e23636;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+ 
+  &:hover {
+    background-color: #d32f2f;
+  }
+ 
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const NoResults = styled.div`
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+`;
+
+const MarvelCharactersPage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const { 
+    data: characters, 
+    loading, 
+    hasMore: hasMoreCharacters, 
+    totalItems: totalCharacters,
+    searching,
+    fetchMore, 
+    search 
+  } = useMarvelData('character', { searchTerm: searchQuery });
+
+  // Initial data load
+  useEffect(() => {
+    search();
+  }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchQuery(searchTerm.trim());
+    search();
+  };
+
+  return (
+    <Layout>
+      <Container>
+        <Title>Personajes de Marvel</Title>
+        <Subtitle>
+          Explora el vasto universo de personajes de Marvel Comics
+        </Subtitle>
+       
+        <SearchContainer>
+          <form onSubmit={handleSearch} style={{ width: '100%', maxWidth: '500px' }}>
+            <SearchInput
+              type="text"
+              placeholder="Buscar personajes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </form>
+        </SearchContainer>
+       
+        {loading && characters.length === 0 ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            {characters.length > 0 ? (
+              <AnimatePresence>
+                <Grid>
+                  {characters.map((character) => (
+                    <MarvelCharacterCard
+                      key={character.marvel_id}
+                      character={character}
+                    />
+                  ))}
+                </Grid>
+              </AnimatePresence>
+            ) : (
+              <NoResults>
+                No se encontraron personajes que coincidan con tu búsqueda.
+              </NoResults>
+            )}
+           
+            {!searching && hasMoreCharacters && (
+              <LoadMoreContainer>
+                <LoadMoreButton
+                  onClick={fetchMore}
+                  disabled={loading}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {loading ? 'Cargando...' : 'Cargar Más'}
+                </LoadMoreButton>
+              </LoadMoreContainer>
+            )}
+          </>
+        )}
+      </Container>
+    </Layout>
+  );
+};
+
+export default MarvelCharactersPage;
