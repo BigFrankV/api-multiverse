@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Layout from '../components/layout/Layout';
 
-
 const HeroSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -18,7 +17,6 @@ const HeroSection = styled.section`
   }
 `;
 
-
 const Title = styled(motion.h1)`
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
@@ -28,7 +26,6 @@ const Title = styled(motion.h1)`
     font-size: 3.5rem;
   }
 `;
-
 
 const Subtitle = styled(motion.p)`
   font-size: 1.2rem;
@@ -41,7 +38,6 @@ const Subtitle = styled(motion.p)`
   }
 `;
 
-
 const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,7 +49,6 @@ const ButtonGroup = styled.div`
   }
 `;
 
-
 const Button = styled(motion.button)`
   padding: 0.8rem 2rem;
   border-radius: 50px;
@@ -63,7 +58,6 @@ const Button = styled(motion.button)`
   transition: all 0.3s ease;
 `;
 
-
 const PrimaryButton = styled(Button)`
   background-color: var(--primary-color);
   color: white;
@@ -72,7 +66,6 @@ const PrimaryButton = styled(Button)`
     background-color: #2c3e97;
   }
 `;
-
 
 const SecondaryButton = styled(Button)`
   background-color: white;
@@ -84,14 +77,12 @@ const SecondaryButton = styled(Button)`
   }
 `;
 
-
 const CardGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   margin-top: 4rem;
 `;
-
 
 const FeatureCard = styled(motion.div)`
   background-color: white;
@@ -106,20 +97,17 @@ const FeatureCard = styled(motion.div)`
   }
 `;
 
-
 const CardIcon = styled.div`
   font-size: 3rem;
   color: var(--primary-color);
   margin-bottom: 1.5rem;
 `;
 
-
 const CardTitle = styled.h3`
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: var(--text-primary);
 `;
-
 
 const CardDescription = styled.p`
   color: var(--text-secondary);
@@ -141,7 +129,6 @@ const CardButton = styled(motion.button)`
     background-color: #2c3e97;
   }
 `;
-
 
 const HomePage = () => {
   return (
@@ -182,6 +169,17 @@ const HomePage = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               Explorar Marvel
+            </SecondaryButton>
+          </Link>
+          <Link to="/rickandmorty">
+            <SecondaryButton
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              Explorar Rick and Morty
             </SecondaryButton>
           </Link>
         </ButtonGroup>
@@ -229,11 +227,32 @@ const HomePage = () => {
             </CardButton>
           </Link>
         </FeatureCard>
-       
+        
         <FeatureCard
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <CardIcon>🧪</CardIcon>
+          <CardTitle>Rick and Morty</CardTitle>
+          <CardDescription>
+            Explora el multiverso con información sobre personajes, ubicaciones y episodios de la serie.
+          </CardDescription>
+          <Link to="/rickandmorty">
+            <CardButton
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Ver más
+            </CardButton>
+          </Link>
+        </FeatureCard>
+       
+        <FeatureCard
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           viewport={{ once: true }}
         >
           <CardIcon>✨</CardIcon>
@@ -258,6 +277,5 @@ const HomePage = () => {
     </Layout>
   );
 };
-
 
 export default HomePage;

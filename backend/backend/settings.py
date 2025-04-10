@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Aplicaciones propias
     'pokemon',
     'marvel',
+    'rickandmorty',
 ]
 
 MIDDLEWARE = [
